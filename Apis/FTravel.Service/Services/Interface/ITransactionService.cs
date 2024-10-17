@@ -1,5 +1,4 @@
-﻿//using FTravel.Repositories.Commons;
-//using FTravel.Repository.Commons;
+﻿//using FTravel.Repository.Commons;
 //using FTravel.Repository.EntityModels;
 //using FTravel.Service.BusinessModels.PaymentModels;
 //using System;
@@ -17,6 +16,7 @@
 //        public Task<Transaction> CreateTransactionAsync(Transaction transaction, int customerId);
 
 //        public Task<Transaction> GetTransactionByIdAsync(int transactionId);
+
 //        public Task<Transaction> GetTransactionByOrderIdAsync(int orderId);
 //    }
 //}

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FTravel.Repositories.Commons
+namespace FTravel.Repository.Commons
 {
     public class Pagination<T> : List<T>
     {

@@ -1,7 +1,7 @@
 ﻿using FTravel.API.Middlewares;
-//using FTravel.Repository.Repositories.Interface;
-//using FTravel.Repository.Repositories;
-//using FTravel.Service.Mapper;
+using FTravel.Repository.Repositories.Interface;
+using FTravel.Repository.Repositories;
+using FTravel.Service.Mapper;
 using System.Diagnostics;
 using System.Security.Claims;
 using FTravel.Service.Services.Interface;
@@ -23,8 +23,8 @@ namespace FTravel.API
             //services.AddScoped<IStationRepository, StationRepository>();
             //services.AddScoped<IStationService, StationService>();
 
-            //services.AddScoped<IUserRepository, UserRepository>();
-            //services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
 
             //services.AddScoped<IRouteRepository, RouteRepository>();
             //services.AddScoped<IRouteService, RouteService>();
@@ -35,7 +35,7 @@ namespace FTravel.API
             //services.AddScoped<ICityRepository, CityRepository>();
             //services.AddScoped<ICityService, CityService>();
 
-            //services.AddScoped<IWalletRepository, WalletRepository>();
+            services.AddScoped<IWalletRepository, WalletRepository>();
             //services.AddScoped<IWalletService, WalletService>();
 
             //services.AddScoped<ITransactionRepository, TransactionRepository>();
@@ -44,8 +44,8 @@ namespace FTravel.API
             //services.AddScoped<IServiceRepository, ServiceRepository>();
             //services.AddScoped<IServiceService, ServiceService>();
 
-            //services.AddScoped<IOtpRepository, OtpRepository>();
-            //services.AddScoped<IOtpService, OtpService>();
+            services.AddScoped<IOtpRepository, OtpRepository>();
+            services.AddScoped<IOtpService, OtpService>();
 
             //services.AddScoped<ITicketRepository, TicketRepository>();
             //services.AddScoped<ITicketService, TicketService>();
@@ -62,9 +62,9 @@ namespace FTravel.API
             //services.AddScoped<IBusCompanyRepository, BusCompanyRepository>();
             //services.AddScoped<IBusCompanyService, BusCompanyService>();
 
-            //services.AddScoped<IClaimsService, ClaimsService>();
+            services.AddScoped<IClaimsService, ClaimsService>();
 
-            //services.AddScoped<IMailService, MailService>();
+            services.AddScoped<IMailService, MailService>();
 
             //services.AddScoped<IOrderRepository, OrderRepository>();
             //services.AddScoped<IOrderService, OrderService>();
@@ -73,14 +73,14 @@ namespace FTravel.API
             //services.AddScoped<INotificationService, NotificationService>();
 
             //services.AddScoped<IServiceTicketRepository, ServiceTicketRepository>();
-            
+
             services.AddHealthChecks();
             services.AddSingleton<GlobalExceptionMiddleware>();
             services.AddSingleton<PerformanceMiddleware>();
             services.AddSingleton<Stopwatch>();
 
             // auto mapper
-            //services.AddAutoMapper(typeof(MapperConfigProfile).Assembly);
+            services.AddAutoMapper(typeof(MapperConfigProfile).Assembly);
 
             services.AddHttpContextAccessor();
 
