@@ -367,10 +367,10 @@
 //            if (wallet != null)
 //            {
 //                var customer = await _customerRepository.GetByIdAsync(wallet.CustomerId.Value);
-//                if (customer != null) 
-//                { 
+//                if (customer != null)
+//                {
 //                    var user = await _userService.GetUserByEmailAsync(customer.Email);
-//                    if (user != null) 
+//                    if (user != null)
 //                    {
 //                        var newNoti = new Notification
 //                        {
@@ -380,7 +380,7 @@
 //                            Message = $"Bạn vừa nạp thành công {amount} ftokens vào ví từ VNPAY"
 //                        };
 //                        await _notificationService.AddNotificationByUserId(user.Id, newNoti);
-//                        if (user.Fcmtoken != null) 
+//                        if (user.Fcmtoken != null)
 //                        {
 //                            await _notificationService.PushMessagePaymentFirebase(newNoti.Title, newNoti.Message, user.Id);
 //                        }

@@ -38,7 +38,7 @@
 //                transaction.WalletId = wallet.Id;
 //                transaction.Status = TransactionStatus.PENDING.ToString();
 //                return await _transactionRepository.AddAsync(transaction);
-//            } 
+//            }
 //            else
 //            {
 //                throw new Exception("Not found wallet customer.");

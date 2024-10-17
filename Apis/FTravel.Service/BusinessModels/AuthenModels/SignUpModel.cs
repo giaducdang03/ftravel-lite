@@ -35,6 +35,6 @@ namespace FTravel.Service.BusinessModels.AuthenModels
         [PasswordPropertyText]
         public string ConfirmPassword { get; set; } = "";
 
-        public RoleEnums Role { get; set; }
+        //public RoleEnums Role { get; set; }
     }
 }

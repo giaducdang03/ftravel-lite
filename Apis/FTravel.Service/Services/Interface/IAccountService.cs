@@ -22,7 +22,7 @@
 
 //        public Task<bool> UpdateFcmTokenAsync(string email, string fcmToken);
 
-//        public Task<bool> DeleteAccountAsync(int id , string currentEmail);
+//        public Task<bool> DeleteAccountAsync(int id, string currentEmail);
 //        Task<bool> UpdateAccount(UpdateAccountModel accountModel);
 
 //    }

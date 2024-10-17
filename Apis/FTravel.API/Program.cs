@@ -2,8 +2,6 @@ using FirebaseAdmin;
 using FTravel.API;
 using FTravel.API.Middlewares;
 using FTravel.Repository.DBContext;
-
-//using FTravel.Repository.DBContext;
 using FTravel.Service.Utils.Email;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
