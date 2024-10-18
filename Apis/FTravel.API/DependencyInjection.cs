@@ -35,32 +35,32 @@ namespace FTravel.API
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<ITransactionService, TransactionService>();
 
-            //services.AddScoped<IServiceRepository, ServiceRepository>();
-            //services.AddScoped<IServiceService, ServiceService>();
+            services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<IServiceService, ServiceService>();
 
             services.AddScoped<IOtpRepository, OtpRepository>();
             services.AddScoped<IOtpService, OtpService>();
 
-            //services.AddScoped<ITicketRepository, TicketRepository>();
-            //services.AddScoped<ITicketService, TicketService>();
+            services.AddScoped<ITicketRepository, TicketRepository>();
+            services.AddScoped<ITicketService, TicketService>();
 
-            //services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
-            //services.AddScoped<ITicketTypeService, TicketTypeService>();
+            services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
+            services.AddScoped<ITicketTypeService, TicketTypeService>();
 
-            //services.AddScoped<ITripRepository, TripRepository>();
-            //services.AddScoped<ITripService, TripService>();
+            services.AddScoped<ITripRepository, TripRepository>();
+            services.AddScoped<ITripService, TripService>();
 
             services.AddScoped<IClaimsService, ClaimsService>();
 
             services.AddScoped<IMailService, MailService>();
 
-            //services.AddScoped<IOrderRepository, OrderRepository>();
-            //services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
 
             //services.AddScoped<INotificationRepository, NotificationRepository>();
             //services.AddScoped<INotificationService, NotificationService>();
 
-            //services.AddScoped<IServiceTicketRepository, ServiceTicketRepository>();
+            services.AddScoped<IServiceTicketRepository, ServiceTicketRepository>();
 
             services.AddHealthChecks();
             services.AddSingleton<GlobalExceptionMiddleware>();

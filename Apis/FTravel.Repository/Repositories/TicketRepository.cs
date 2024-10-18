@@ -1,70 +1,69 @@
-﻿//using FTravel.Repository.DBContext;
-//using FTravel.Repository.EntityModels;
-//using FTravel.Repository.Repositories.Interface;
-//using Microsoft.EntityFrameworkCore;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Net.Sockets;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using FTravel.Repository.DBContext;
+using FTravel.Repository.EntityModels;
+using FTravel.Repository.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace FTravel.Repository.Repositories
-//{
-//    public class TicketRepository : GenericRepository<Ticket>, ITicketRepository
-//    {
-//        private readonly FtravelContext _context;
+namespace FTravel.Repository.Repositories
+{
+    public class TicketRepository : GenericRepository<Ticket>, ITicketRepository
+    {
+        private readonly FtravelLiteContext _context;
 
-//        public TicketRepository(FtravelContext context) : base(context)
-//        {
-//            _context = context;
-//        }
+        public TicketRepository(FtravelLiteContext context) : base(context)
+        {
+            _context = context;
+        }
 
-//        public async Task<Ticket> CreateTicket(Ticket ticket)
-//        {
-//            _context.Add(ticket);
-//            await _context.SaveChangesAsync();
-//            return ticket;
-//        }
+        public async Task<Ticket> CreateTicket(Ticket ticket)
+        {
+            _context.Add(ticket);
+            await _context.SaveChangesAsync();
+            return ticket;
+        }
 
-//        public async Task<List<Ticket>> GetAll()
-//        {
-//            return await _context.Tickets
-//                                .Include(x => x.TicketType)
-//                                .ToListAsync();
-//        }
+        public async Task<List<Ticket>> GetAll()
+        {
+            return await _context.Tickets
+                                .Include(x => x.TicketType)
+                                .ToListAsync();
+        }
 
-//        public async Task<List<Ticket>> GetAllByTripId(int tripId)
-//        {
-//            return await _context.Tickets
-//                                .Include(x => x.TicketType)
-//                                .Where(x => x.TripId == tripId)
-//                                .ToListAsync();
-//        }
+        public async Task<List<Ticket>> GetAllByTripId(int tripId)
+        {
+            return await _context.Tickets
+                                .Include(x => x.TicketType)
+                                .Where(x => x.TripId == tripId)
+                                .ToListAsync();
+        }
 
-//        public async Task<Ticket> GetTicketByIdAsync(int ticketId)
-//        {
-//            return await _context.Tickets.Include(x => x.TicketType).FirstOrDefaultAsync(x => x.Id == ticketId);
-//        }
+        public async Task<Ticket> GetTicketByIdAsync(int ticketId)
+        {
+            return await _context.Tickets.Include(x => x.TicketType).FirstOrDefaultAsync(x => x.Id == ticketId);
+        }
 
-//        public async Task<Ticket> GetTripDetailById(int id)
-//        {
-//            return await _context.Tickets
-//                                .Include(x => x.TicketType)
-//                                .FirstOrDefaultAsync(x => x.Id == id);
-//        }
+        public async Task<Ticket> GetTripDetailById(int id)
+        {
+            return await _context.Tickets
+                                .Include(x => x.TicketType)
+                                .FirstOrDefaultAsync(x => x.Id == id);
+        }
 
-//        public async Task<Ticket> GetTicketByIdAsync2(int id)
-//        {
-//            return await _context.Tickets
-//                                .Include(x => x.TicketType)
-//                                .Include(x => x.Trip).ThenInclude(t => t.Route.BusCompany)
-//                                .Include(x => x.Trip).ThenInclude(t => t.Route.StartPointNavigation)
-//                                .Include(x => x.Trip).ThenInclude(t => t.Route.EndPointNavigation)
-//                                .Include(x => x.ServiceTickets).ThenInclude(x => x.Service).ThenInclude(x => x.Station)
-//                                .FirstOrDefaultAsync(x => x.Id == id);
-//        }
+        public async Task<Ticket> GetTicketByIdAsync2(int id)
+        {
+            return await _context.Tickets
+                                .Include(x => x.TicketType)
+                                .Include(x => x.Trip).ThenInclude(t => t.Route.StartPointNavigation)
+                                .Include(x => x.Trip).ThenInclude(t => t.Route.EndPointNavigation)
+                                .Include(x => x.ServiceTickets).ThenInclude(x => x.Service).ThenInclude(x => x.Station)
+                                .FirstOrDefaultAsync(x => x.Id == id);
+        }
 
 
-//    }
-//}
+    }
+}

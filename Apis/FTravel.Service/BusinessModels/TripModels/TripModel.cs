@@ -14,9 +14,6 @@ namespace FTravel.Service.BusinessModels.TripModels
         public string Name { get; set; }
         public int RouteId {  get; set; }
         public string? RouteName { get; set; }
-        public int BusCompanyId { get; set; }
-        public string BusCompanyName { get; set; }
-        public string BusCompanyImg {  get; set; }
         public int LowestPrice {  get; set; }
         public DateTime? OpenTicketDate { get; set; }
         public DateTime? EstimatedStartDate { get; set; }
