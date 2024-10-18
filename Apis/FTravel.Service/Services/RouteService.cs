@@ -49,10 +49,7 @@ namespace FTravel.Service.Services
             //    IsDeleted = x.IsDeleted,
             //}).ToList();
 
-            return new Pagination<RouteModel>(routeModels,
-                routes.TotalCount,
-                routes.CurrentPage,
-                routes.PageSize);
+            return routeModels;
         }
 
 

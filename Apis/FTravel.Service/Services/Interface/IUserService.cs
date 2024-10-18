@@ -44,7 +44,7 @@ namespace FTravel.Service.Services.Interface
 
         // user manager
 
-        public Task<Pagination<AccountModel>> GetAllUsersAsync(PaginationParameter paginationParameter);
+        public Task<Pagination<UserModel>> GetAllUsersAsync(PaginationParameter paginationParameter);
 
         Task<bool> CreateAccountAsync(CreateAccountModel model);
 

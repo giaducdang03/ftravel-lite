@@ -486,11 +486,11 @@ namespace FTravel.Service.Services
             return null;
         }
 
-        public async Task<Pagination<AccountModel>> GetAllUsersAsync(PaginationParameter paginationParameter)
+        public async Task<Pagination<UserModel>> GetAllUsersAsync(PaginationParameter paginationParameter)
         {
             var users = await _userRepository.ToPagination(paginationParameter);
-            var accountModels = _mapper.Map<List<AccountModel>>(users);
-            return new Pagination<AccountModel>(accountModels,
+            var accountModels = _mapper.Map<Pagination<UserModel>>(users);
+            return new Pagination<UserModel>(accountModels,
                 users.TotalCount,
                 users.CurrentPage,
                 users.PageSize);

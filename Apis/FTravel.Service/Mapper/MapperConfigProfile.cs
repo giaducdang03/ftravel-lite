@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FTravel.Repository.Commons;
 using FTravel.Repository.EntityModels;
 using FTravel.Service.BusinessModels;
 using FTravel.Service.BusinessModels.AccountModels;
@@ -17,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
 namespace FTravel.Service.Mapper
 {
@@ -29,8 +31,10 @@ namespace FTravel.Service.Mapper
             // user
 
             CreateMap<UserModel, User>().ReverseMap();
+            CreateMap<Pagination<User>, Pagination<UserModel>>().ConvertUsing<PaginationConverter<User, UserModel>>();
 
             CreateMap<Wallet, WalletModel>().ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.User.FullName));
+            CreateMap<Pagination<Wallet>, Pagination<WalletModel>>().ConvertUsing<PaginationConverter<Wallet, WalletModel>>();
             CreateMap<Transaction, TransactionModel>();
 
             CreateMap<UpdateAccountModel, User>()
@@ -50,6 +54,7 @@ namespace FTravel.Service.Mapper
             CreateMap<Route, RouteModel>()
                 .ForMember(dest => dest.StartPoint, opt => opt.MapFrom(src => src.StartPointNavigation.Name))
                 .ForMember(dest => dest.EndPoint, opt => opt.MapFrom(src => src.EndPointNavigation.Name));
+            CreateMap<Pagination<Route>, Pagination<RouteModel>>().ConvertUsing<PaginationConverter<Route, RouteModel>>();
 
             // CreateMap<TicketServiceModel, ServiceTicket>().ReverseMap();
 
@@ -164,6 +169,15 @@ namespace FTravel.Service.Mapper
             //     .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.Service.Name))
             //     .ForMember(dest => dest.StationId, opt => opt.MapFrom(src => src.Service.StationId))
             //     .ForMember(dest => dest.StationName, opt => opt.MapFrom(src => src.Service.Station.Name));
+        }
+
+        public class PaginationConverter<TSource, TDestination> : ITypeConverter<Pagination<TSource>, Pagination<TDestination>>
+        {
+            public Pagination<TDestination> Convert(Pagination<TSource> source, Pagination<TDestination> destination, ResolutionContext context)
+            {
+                var mappedItems = context.Mapper.Map<List<TDestination>>(source);
+                return new Pagination<TDestination>(mappedItems, source.TotalCount, source.CurrentPage, source.PageSize);
+            }
         }
     }
 }

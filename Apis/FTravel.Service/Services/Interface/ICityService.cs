@@ -1,5 +1,4 @@
-﻿using FTravel.Repositories.Commons;
-using FTravel.Repository.Commons;
+﻿using FTravel.Repository.Commons;
 using FTravel.Repository.EntityModels;
 using FTravel.Service.BusinessModels;
 using System;

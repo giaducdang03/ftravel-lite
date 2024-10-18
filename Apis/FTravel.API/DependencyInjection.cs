@@ -26,14 +26,11 @@ namespace FTravel.API
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
 
-            //services.AddScoped<IRouteRepository, RouteRepository>();
-            //services.AddScoped<IRouteService, RouteService>();
+            services.AddScoped<IRouteRepository, RouteRepository>();
+            services.AddScoped<IRouteService, RouteService>();
 
-            //services.AddScoped<IRoleRepository, RoleRepository>();
-            //services.AddScoped<ICustomerRepository, CustomerRepository>();
-
-            //services.AddScoped<ICityRepository, CityRepository>();
-            //services.AddScoped<ICityService, CityService>();
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<ICityService, CityService>();
 
             services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<IWalletService, WalletService>();
@@ -55,12 +52,6 @@ namespace FTravel.API
 
             //services.AddScoped<ITripRepository, TripRepository>();
             //services.AddScoped<ITripService, TripService>();
-
-            //services.AddScoped<ISettingRepository, SettingRepository>();
-            //services.AddScoped<ISettingService, SettingService>();
-
-            //services.AddScoped<IBusCompanyRepository, BusCompanyRepository>();
-            //services.AddScoped<IBusCompanyService, BusCompanyService>();
 
             services.AddScoped<IClaimsService, ClaimsService>();
 

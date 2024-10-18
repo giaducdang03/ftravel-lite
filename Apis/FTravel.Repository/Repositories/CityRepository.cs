@@ -1,5 +1,4 @@
-﻿using FTravel.Repositories.Commons;
-using FTravel.Repository.Commons;
+﻿using FTravel.Repository.Commons;
 using FTravel.Repository.DBContext;
 using FTravel.Repository.EntityModels;
 using FTravel.Repository.Repositories.Interface;
