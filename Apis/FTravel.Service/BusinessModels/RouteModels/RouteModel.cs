@@ -21,12 +21,6 @@ namespace FTravel.Service.BusinessModels.RouteModels
 
         public string? Status { get; set; }
 
-        public string? BusCompanyName { get; set; }
-
-        public string? BusCompanyImg {  get; set; }
-
-        public virtual BuscompanyModel? BusCompany { get; set; }
-
         public virtual ICollection<RouteStationModel> RouteStations { get; set; } = new List<RouteStationModel>();
 
         //public virtual ICollection<Repository.EntityModels.Service> Services { get; set; } = new List<Repository.EntityModels.Service>();

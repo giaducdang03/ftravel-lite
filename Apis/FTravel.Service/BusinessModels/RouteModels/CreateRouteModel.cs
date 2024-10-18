@@ -14,7 +14,5 @@ namespace FTravel.Service.BusinessModels.RouteModels
         public int StartPoint { get; set; }
 
         public int EndPoint { get; set; }
-
-        public int? BusCompanyId { get; set; }
     }
 }
