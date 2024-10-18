@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿//using System.ComponentModel.DataAnnotations;
 
-namespace FTravel.API.ViewModels.RequestModels
-{
-    public class CreateStationModel
-    {
-        [Required]
-        public string Name { get; set; } = null!;
+//namespace FTravel.API.ViewModels.RequestModels
+//{
+//    public class CreateStationModel
+//    {
+//        [Required]
+//        public string Name { get; set; } = null!;
 
-        [Required]
-        public int BusCompanyId { get; set; }
-    }
-}
+//        [Required]
+//        public int BusCompanyId { get; set; }
+//    }
+//}

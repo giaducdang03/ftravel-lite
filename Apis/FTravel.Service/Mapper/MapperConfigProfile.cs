@@ -56,6 +56,12 @@ namespace FTravel.Service.Mapper
                 .ForMember(dest => dest.EndPoint, opt => opt.MapFrom(src => src.EndPointNavigation.Name));
             CreateMap<Pagination<Route>, Pagination<RouteModel>>().ConvertUsing<PaginationConverter<Route, RouteModel>>();
 
+            // station
+
+            CreateMap<Station, StationModel>()
+                 .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name));
+            CreateMap<Pagination<Station>, Pagination<StationModel>>().ConvertUsing<PaginationConverter<Station, StationModel>>();
+
             // CreateMap<TicketServiceModel, ServiceTicket>().ReverseMap();
 
             // CreateMap<CreateTicketModel, Ticket>().ReverseMap();
@@ -69,8 +75,7 @@ namespace FTravel.Service.Mapper
             // .ForMember(dest => dest.CreateDate, opt => opt.Ignore())
             // .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
 
-            // CreateMap<StationModel, Station>().ReverseMap()
-            //     .ForMember(dest => dest.BusCompanyName, opt => opt.MapFrom(src => src.BusCompany.Name));
+
 
             // CreateMap<TicketType, TicketTypeModel>();
             // CreateMap<AccountModel, User>().ReverseMap()

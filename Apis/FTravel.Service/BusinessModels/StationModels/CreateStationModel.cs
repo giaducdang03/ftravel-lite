@@ -1,5 +1,4 @@
-﻿using FTravel.Service.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,22 +7,15 @@ using System.Threading.Tasks;
 
 namespace FTravel.Service.BusinessModels.StationModels
 {
-    public class UpdateStationModel
+    public class CreateStationModel
     {
         [Required]
-        public int Id { get; set; }
+        public string Name { get; set; } = null!;
 
         [Required]
-        public string Name { get; set; } = "";
-
-        [Required]
-        public string Address { get; set; } = "";
+        public string Address { get; set; } = null!;
 
         [Required]
         public int CityCode { get; set; }
-
-        [Required]
-        public CommonStatus Status { get; set; }
-
     }
 }
