@@ -12,5 +12,6 @@ namespace FTravel.Repository.Repositories.Interface
     {
         public Task<Pagination<Transaction>> GetTransactionsByWalletId(int walletId, PaginationParameter paginationParameter);
         public Task<Transaction> GetTransactionsByOrderId(int orderId);
+        public Task<Transaction> GetTransactionsByCode(int transactionCode);
     }
 }

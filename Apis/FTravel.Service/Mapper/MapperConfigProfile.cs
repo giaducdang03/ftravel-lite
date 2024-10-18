@@ -30,7 +30,7 @@ namespace FTravel.Service.Mapper
 
             CreateMap<UserModel, User>().ReverseMap();
 
-            CreateMap<Wallet, WalletModel>();
+            CreateMap<Wallet, WalletModel>().ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.User.FullName));
             CreateMap<Transaction, TransactionModel>();
 
             CreateMap<UpdateAccountModel, User>()

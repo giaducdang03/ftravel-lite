@@ -38,5 +38,11 @@ namespace FTravel.Repository.Repositories
             return result;
         }
 
+        public async Task<Transaction> GetTransactionsByCode(int transactionCode)
+        {
+            var result = await _context.Transactions.FirstOrDefaultAsync(x => x.TrasactionCode == transactionCode);
+            return result;
+        }
+
     }
 }
