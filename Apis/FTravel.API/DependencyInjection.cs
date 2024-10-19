@@ -57,8 +57,8 @@ namespace FTravel.API
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderService, OrderService>();
 
-            //services.AddScoped<INotificationRepository, NotificationRepository>();
-            //services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddScoped<IServiceTicketRepository, ServiceTicketRepository>();
 
