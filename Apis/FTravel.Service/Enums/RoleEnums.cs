@@ -8,9 +8,7 @@ namespace FTravel.Service.Enums
 {
     public enum RoleEnums
     {
-        CUSTOMER,
-        DRIVER,
-        BUSCOMPANY,
+        USER,
         ADMIN
     }
 }

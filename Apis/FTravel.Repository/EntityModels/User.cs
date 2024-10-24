@@ -39,5 +39,5 @@ public partial class User : BaseEntity
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
-    public virtual ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
+    public virtual Wallet? Wallet { get; set; }
 }

@@ -10,7 +10,7 @@ namespace FTravel.Service.BusinessModels.PaymentModels
     public class WalletModel : BaseEntity
     {
 
-        public int? CustomerId { get; set; }
+        public int? UserId { get; set; }
 
         public string CustomerName { get; set; } = "";
 

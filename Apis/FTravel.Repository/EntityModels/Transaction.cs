@@ -22,4 +22,6 @@ public partial class Transaction : BaseEntity
     public virtual Order? Order { get; set; }
 
     public virtual Wallet Wallet { get; set; } = null!;
+
+    public int TrasactionCode { get; set; }
 }

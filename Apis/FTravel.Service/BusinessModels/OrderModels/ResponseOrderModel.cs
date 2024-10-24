@@ -17,6 +17,6 @@ namespace FTravel.Service.BusinessModels.OrderModels
 
         public string? PaymentStatus { get; set; }
 
-        public int? CustomerId { get; set; }
+        public int? UserId { get; set; }
     }
 }

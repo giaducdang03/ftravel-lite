@@ -1,18 +1,21 @@
-﻿//using FTravel.Repository.EntityModels;
-//using Microsoft.EntityFrameworkCore.Storage;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using FTravel.Repository.Commons;
+using FTravel.Repository.EntityModels;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace FTravel.Repository.Repositories.Interface
-//{
-//    public interface IWalletRepository: IGenericRepository<Wallet>
-//    {
-//        public Task<Wallet> GetWalletByCustomerId(int customerId);
+namespace FTravel.Repository.Repositories.Interface
+{
+    public interface IWalletRepository : IGenericRepository<Wallet>
+    {
+        public Task<Wallet> GetWalletByUserId(int userId);
 
-//        public Task<Wallet> GetWalletByIdAsync(int walletId);
+        public Task<Wallet> GetWalletByIdAsync(int walletId);
 
-//    }
-//}
+        public Task<Pagination<Wallet>> GetWalletPaginationAsync(PaginationParameter paginationParameter);
+
+    }
+}

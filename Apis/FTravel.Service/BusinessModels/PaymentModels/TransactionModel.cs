@@ -11,6 +11,8 @@ namespace FTravel.Service.BusinessModels.PaymentModels
     {
         public int? WalletId { get; set; }
 
+        public int? TransactionCode { get; set; }
+
         public string? TransactionType { get; set; }
 
         public int? Amount { get; set; }
