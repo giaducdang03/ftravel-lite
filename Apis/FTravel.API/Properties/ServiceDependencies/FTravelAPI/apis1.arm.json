@@ -4,7 +4,7 @@
   "parameters": {
     "resourceGroupName": {
       "type": "string",
-      "defaultValue": "FTravel",
+      "defaultValue": "FTravel-Lite",
       "metadata": {
         "_parameterType": "resourceGroup",
         "description": "Name of the resource group for the resource. It is recommended to put resources under same resource group for better tracking."
@@ -49,7 +49,7 @@
           "contentVersion": "1.0.0.0",
           "resources": [
             {
-              "name": "FTravelAPIapi",
+              "name": "FTravelAPI2",
               "type": "Microsoft.ApiManagement/service",
               "location": "[parameters('resourceLocation')]",
               "properties": {
@@ -59,7 +59,7 @@
                 "hostnameConfigurations": [
                   {
                     "type": "Proxy",
-                    "hostName": "ftravelapiapi.azure-api.net",
+                    "hostName": "ftravelapi2.azure-api.net",
                     "encodedCertificate": null,
                     "keyVaultId": null,
                     "certificatePassword": null,
@@ -95,13 +95,13 @@
             },
             {
               "type": "Microsoft.ApiManagement/service/apis",
-              "name": "FTravelAPIapi/FTravelAPI",
+              "name": "FTravelAPI2/FTravelAPI",
               "properties": {
-                "displayName": "FTravel Web API",
+                "displayName": "FTravelAPI",
                 "apiRevision": "1",
                 "description": null,
                 "subscriptionRequired": true,
-                "serviceUrl": "https://ftravelapi.azurewebsites.net",
+                "serviceUrl": null,
                 "path": "",
                 "protocols": [
                   "https"
@@ -118,7 +118,7 @@
               },
               "apiVersion": "2019-12-01",
               "dependsOn": [
-                "FTravelAPIapi"
+                "FTravelAPI2"
               ]
             }
           ]

@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core application to Web App FTravelAPI with API Management Service FTravelAPI-FTravelAPI
+name: Build and deploy .NET Core application to Web App FTravelAPI with API Management Service FTravelAPI2-FTravelAPI
 on:
   push:
     branches:
@@ -8,17 +8,17 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: FTravel.API\publish
   AZURE_APIM_RESOURCE_PATH: /
   AZURE_APIM_RESOURCEGROUP: FTravel-Lite
-  AZURE_APIM_SERVICENAME: FTravelAPI
+  AZURE_APIM_SERVICENAME: FTravelAPI2
   AZURE_APIM_API_ID: FTravelAPI
   AZURE_APIM_APPSERVICEURL: https://ftravelapi.azurewebsites.net
   SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.4.0
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
   API_IMPORT_SPECIFICATION_PATH: FTravel.API\publish\swagger.json
-  API_IMPORT_DLL: Apis\FTravel.API\bin\Release\net8.0\FTravel.API.dll
+  API_IMPORT_DLL: Apis/FTravel.API\bin\Release\net8.0\FTravel.API.dll
   API_IMPORT_VERSION: v1
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
-  WORKING_DIRECTORY: Apis\FTravel.API
+  WORKING_DIRECTORY: Apis/FTravel.API
 jobs:
   build:
     runs-on: windows-latest
@@ -72,11 +72,11 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-        publish-profile: ${{ secrets.FTravelAPI_35AD }}
+        publish-profile: ${{ secrets.FTravelAPI_E6AC }}
     - name: Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.FTravelAPI_SPN }}
+        creds: ${{ secrets.FTravelAPI2_SPN }}
     - name: Import API into Azure API Management
       run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path "${{ env.API_IMPORT_SPECIFICATION_PATH }}" --specification-format OpenApi --subscription-required false
     - name: logout
