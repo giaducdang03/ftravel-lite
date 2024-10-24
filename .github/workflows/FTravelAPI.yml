@@ -14,11 +14,11 @@ env:
   SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.4.0
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
   API_IMPORT_SPECIFICATION_PATH: FTravel.API\publish\swagger.json
-  API_IMPORT_DLL: FTravel.API\bin\Release\net8.0\FTravel.API.dll
+  API_IMPORT_DLL: Apis\FTravel.API\bin\Release\net8.0\FTravel.API.dll
   API_IMPORT_VERSION: v1
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
-  WORKING_DIRECTORY: Apis/FTravel.API
+  WORKING_DIRECTORY: Apis\FTravel.API
 jobs:
   build:
     runs-on: windows-latest
