@@ -350,18 +350,24 @@ namespace FTravel.Service.Services
 
             var existUser = await _userRepository.GetUserByEmailAsync(payload.Email);
 
-            if (existUser != null && existUser.GoogleId != null)
+            if (existUser != null)
             {
+
+                if (existUser.GoogleId == null)
+                {
+                    throw new Exception("Có lỗi trong quá trình đăng nhập với Google");
+                }
+
                 var roleUser = existUser.Role;
 
                 if (roleUser != RoleEnums.USER.ToString())
                 {
-                    throw new Exception("Tài khoản của bạn không được phép đăng nhập với Google.");
+                    throw new Exception("Tài khoản của bạn không được phép đăng nhập với Google");
                 }
 
                 if (existUser.Status == UserStatus.BANNED.ToString())
                 {
-                    throw new Exception("Tài khoản đã bị cấm.");
+                    throw new Exception("Tài khoản đã bị cấm");
                 }
                 else
                 {
@@ -387,7 +393,7 @@ namespace FTravel.Service.Services
                     try
                     {
                         // add wallet
-                        Wallet USERWallet = new Wallet
+                        Wallet userWallet = new Wallet
                         {
                             AccountBalance = 0,
                             Status = WalletStatus.ACTIVE.ToString(),
@@ -401,8 +407,9 @@ namespace FTravel.Service.Services
                             UnsignFullName = StringUtils.ConvertToUnSign(payload.Name),
                             AvatarUrl = payload.Picture,
                             Status = UserStatus.ACTIVE.ToString(),
-                            GoogleId = payload.JwtId,
-                            Wallet = USERWallet
+                            GoogleId = payload.Subject,
+                            Wallet = userWallet,
+                            Role = RoleEnums.USER.ToString(),
                         };
 
                         await _userRepository.AddAsync(newUser);
