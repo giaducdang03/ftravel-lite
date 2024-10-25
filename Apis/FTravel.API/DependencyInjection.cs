@@ -14,8 +14,8 @@ namespace FTravel.API
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)
         {
             // use DI here
-            //services.AddScoped<IOrderedTicketRepository, OrderedTicketRepository>();
-            //services.AddScoped<IOrderedTicketService, OrderedTicketService>();
+            services.AddScoped<IOrderedTicketRepository, OrderedTicketRepository>();
+            services.AddScoped<IOrderedTicketService, OrderedTicketService>();
 
             services.AddScoped<IStationRepository, StationRepository>();
             services.AddScoped<IStationService, StationService>();
