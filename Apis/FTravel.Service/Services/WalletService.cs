@@ -23,19 +23,19 @@ namespace FTravel.Service.Services
     {
         private readonly IWalletRepository _walletRepository;
         private readonly ITransactionRepository _transactionRepository;
-        //private readonly INotificationService _notificationService;
+        private readonly INotificationService _notificationService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public WalletService(IWalletRepository walletRepository,
             ITransactionRepository transactionRepository,
-            //INotificationService notificationService,
+            INotificationService notificationService,
             IUserService userService,
             IMapper mapper)
         {
             _walletRepository = walletRepository;
             _transactionRepository = transactionRepository;
-            //_notificationService = notificationService;
+            _notificationService = notificationService;
             _userService = userService;
             _mapper = mapper;
         }
@@ -211,7 +211,7 @@ namespace FTravel.Service.Services
 
                                     await _transactionRepository.UpdateAsync(updateTransaction);
 
-                                    //await SendNotificationToUser(updateWallet.Id, updateTransaction.Amount);
+                                    await SendNotificationToUser(updateWallet.Id, updateTransaction.Amount);
 
                                     await dbTransaction.CommitAsync();
                                     return true;
@@ -322,34 +322,34 @@ namespace FTravel.Service.Services
             return false;
         }
 
-        //private async Task<bool> SendNotificationToUser(int walletId, int amount)
-        //{
-        //    var wallet = await _walletRepository.GetWalletByIdAsync(walletId);
-        //    if (wallet != null)
-        //    {
-        //        var customer = await _customerRepository.GetByIdAsync(wallet.CustomerId.Value);
-        //        if (customer != null)
-        //        {
-        //            var user = await _userService.GetUserByEmailAsync(customer.Email);
-        //            if (user != null)
-        //            {
-        //                var newNoti = new Notification
-        //                {
-        //                    EntityId = walletId,
-        //                    Type = NotificationType.WALLET.ToString(),
-        //                    Title = "Nạp tiền vào ví thành công",
-        //                    Message = $"Bạn vừa nạp thành công {amount} ftokens vào ví từ VNPAY"
-        //                };
-        //                await _notificationService.AddNotificationByUserId(user.Id, newNoti);
-        //                if (user.Fcmtoken != null)
-        //                {
-        //                    await _notificationService.PushMessagePaymentFirebase(newNoti.Title, newNoti.Message, user.Id);
-        //                }
-        //                return true;
-        //            }
-        //        }
-        //    }
-        //    return false;
-        //}
+        private async Task<bool> SendNotificationToUser(int walletId, int amount)
+        {
+            var wallet = await _walletRepository.GetWalletByIdAsync(walletId);
+            if (wallet != null)
+            {
+                var customer = await _userService.GetUserByIdAsync(wallet.UserId.Value);
+                if (customer != null)
+                {
+                    var user = await _userService.GetUserByEmailAsync(customer.Email);
+                    if (user != null)
+                    {
+                        var newNoti = new Notification
+                        {
+                            EntityId = walletId,
+                            Type = NotificationType.WALLET.ToString(),
+                            Title = "Nạp tiền vào ví thành công",
+                            Message = $"Bạn vừa nạp thành công {amount} ftokens vào ví từ VNPAY"
+                        };
+                        await _notificationService.AddNotificationByUserId(user.Id, newNoti);
+                        if (user.Fcmtoken != null)
+                        {
+                            await _notificationService.PushMessagePaymentFirebase(newNoti.Title, newNoti.Message, user.Id);
+                        }
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }
