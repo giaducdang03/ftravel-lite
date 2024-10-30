@@ -32,7 +32,7 @@ namespace FTravel.Service.Services
         private readonly IServiceTicketRepository _serviceTicketRepository;
         private readonly IUserService _userService;
 
-        //private readonly INotificationService _notificationService;
+        private readonly INotificationService _notificationService;
 
         public OrderService(IOrderRepository orderRepository,
             ITransactionService transactionService,
@@ -43,8 +43,8 @@ namespace FTravel.Service.Services
             ITicketRepository ticketRepository,
             ITripRepository tripRepository,
             IServiceTicketRepository serviceTicketRepository,
-            IUserService userService
-            //INotificationService notificationService
+            IUserService userService,
+            INotificationService notificationService
             )
         {
             _orderRepository = orderRepository;
@@ -56,7 +56,7 @@ namespace FTravel.Service.Services
             _tripRepository = tripRepository;
             _serviceTicketRepository = serviceTicketRepository;
             _userService = userService;
-            //_notificationService = notificationService;
+            _notificationService = notificationService;
             _mapper = mapper;
         }
 
@@ -359,15 +359,15 @@ namespace FTravel.Service.Services
                                             await _ticketRepository.UpdateAsync(ticketBuy);
 
                                             //// send noti
-                                            //var newNoti = new Notification
-                                            //{
-                                            //    EntityId = addedOrder.Id,
-                                            //    Type = NotificationType.ORDER.ToString(),
-                                            //    Title = "Mua vé thành công",
-                                            //    Message = $"Bạn đã mua vé thành công cho chuyến {trip.Name}."
-                                            //};
+                                            var newNoti = new Notification
+                                            {
+                                                EntityId = addedOrder.Id,
+                                                Type = NotificationType.ORDER.ToString(),
+                                                Title = "Mua vé thành công",
+                                                Message = $"Bạn đã mua vé thành công cho chuyến {trip.Name}."
+                                            };
 
-                                            //await _notificationService.AddNotificationByCustomerId(addedOrder.CustomerId.Value, newNoti);
+                                            await _notificationService.AddNotificationByCustomerId(addedOrder.UserId.Value, newNoti);
 
                                         }
                                         else
