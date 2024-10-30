@@ -136,15 +136,14 @@ namespace FTravel.Service.Mapper
             CreateMap<OrderDetail, OrderViewModel>()
                 .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Order.User.FullName)).ReverseMap();
 
-            // CreateMap<OrderDetail, OrderDetailModel>()
-            //      .ForMember(dest => dest.BusCompanyName, opt => opt.MapFrom(src => src.Ticket.Trip.Route.BusCompany.Name))
-            //      .ForMember(dest => dest.TripStartDate, opt => opt.MapFrom(src => src.Ticket.Trip.EstimatedStartDate))
-            //      .ForMember(dest => dest.TripEndDate, opt => opt.MapFrom(src => src.Ticket.Trip.EstimatedEndDate))
-            //      .ForMember(dest => dest.TripName, opt => opt.MapFrom(src => src.Ticket.Trip.Name))
-            //      .ForMember(dest => dest.StartPoint, opt => opt.MapFrom(src => src.Ticket.Trip.Route.StartPointNavigation.Name))
-            //      .ForMember(dest => dest.EndPoint, opt => opt.MapFrom(src => src.Ticket.Trip.Route.EndPointNavigation.Name))
-            //      .ForMember(dest => dest.SeatCode, opt => opt.MapFrom(src => src.Ticket.SeatCode))
-            //      .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.ServiceName));
+            CreateMap<OrderDetail, OrderDetailModel>()
+                 .ForMember(dest => dest.TripStartDate, opt => opt.MapFrom(src => src.Ticket.Trip.EstimatedStartDate))
+                 .ForMember(dest => dest.TripEndDate, opt => opt.MapFrom(src => src.Ticket.Trip.EstimatedEndDate))
+                 .ForMember(dest => dest.TripName, opt => opt.MapFrom(src => src.Ticket.Trip.Name))
+                 .ForMember(dest => dest.StartPoint, opt => opt.MapFrom(src => src.Ticket.Trip.Route.StartPointNavigation.Name))
+                 .ForMember(dest => dest.EndPoint, opt => opt.MapFrom(src => src.Ticket.Trip.Route.EndPointNavigation.Name))
+                 .ForMember(dest => dest.SeatCode, opt => opt.MapFrom(src => src.Ticket.SeatCode))
+                 .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.ServiceName));
 
 
 
@@ -168,11 +167,11 @@ namespace FTravel.Service.Mapper
                 .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.Order.TotalPrice))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Order.User.Email));
 
-            // // my ticket
-            // CreateMap<ServiceTicket, ServiceTicketModel>()
-            //     .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.Service.Name))
-            //     .ForMember(dest => dest.StationId, opt => opt.MapFrom(src => src.Service.StationId))
-            //     .ForMember(dest => dest.StationName, opt => opt.MapFrom(src => src.Service.Station.Name));
+            // my ticket
+            CreateMap<ServiceTicket, ServiceTicketModel>()
+                .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.Service.Name))
+                .ForMember(dest => dest.StationId, opt => opt.MapFrom(src => src.Service.StationId))
+                .ForMember(dest => dest.StationName, opt => opt.MapFrom(src => src.Service.Station.Name));
         }
 
         public class PaginationConverter<TSource, TDestination> : ITypeConverter<Pagination<TSource>, Pagination<TDestination>>
