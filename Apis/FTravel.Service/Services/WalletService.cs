@@ -322,6 +322,34 @@ namespace FTravel.Service.Services
             return false;
         }
 
+        public async Task<bool> RefundToWalletAsync(int walletId, int amount, string message)
+        {
+            var wallet = await _walletRepository.GetWalletByIdAsync(walletId);
+            if (wallet != null)
+            {
+                // create transaction
+                Transaction newTransaction = new Transaction()
+                {
+                    Amount = amount,
+                    WalletId = wallet.Id,
+                    TransactionType = TransactionType.IN.ToString(),
+                    Status = TransactionStatus.SUCCESS.ToString(),
+                    Description = message,
+                    TrasactionCode = NumberUtils.GenerateSixDigitNumber(),
+                    TransactionDate = TimeUtils.GetTimeVietNam(),
+                };
+
+                await _transactionRepository.AddAsync(newTransaction);
+
+                // update wallet
+                wallet.AccountBalance += amount;
+                await _walletRepository.UpdateAsync(wallet);
+
+                return true;
+            }
+            return false;
+        }
+
         private async Task<bool> SendNotificationToUser(int walletId, int amount)
         {
             var wallet = await _walletRepository.GetWalletByIdAsync(walletId);
@@ -339,6 +367,36 @@ namespace FTravel.Service.Services
                             Type = NotificationType.WALLET.ToString(),
                             Title = "Nạp tiền vào ví thành công",
                             Message = $"Bạn vừa nạp thành công {amount} ftokens vào ví từ VNPAY"
+                        };
+                        await _notificationService.AddNotificationByUserId(user.Id, newNoti);
+                        if (user.Fcmtoken != null)
+                        {
+                            await _notificationService.PushMessagePaymentFirebase(newNoti.Title, newNoti.Message, user.Id);
+                        }
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private async Task<bool> SendRefundNotificationToUser(int walletId, string body)
+        {
+            var wallet = await _walletRepository.GetWalletByIdAsync(walletId);
+            if (wallet != null)
+            {
+                var customer = await _userService.GetUserByIdAsync(wallet.UserId.Value);
+                if (customer != null)
+                {
+                    var user = await _userService.GetUserByEmailAsync(customer.Email);
+                    if (user != null)
+                    {
+                        var newNoti = new Notification
+                        {
+                            EntityId = walletId,
+                            Type = NotificationType.WALLET.ToString(),
+                            Title = "Hoàn tiền mua vé",
+                            Message = $"Bạn vừa được {body}"
                         };
                         await _notificationService.AddNotificationByUserId(user.Id, newNoti);
                         if (user.Fcmtoken != null)

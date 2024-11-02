@@ -10,6 +10,7 @@ namespace FTravel.Service.Enums
     {
         SUCCESS,
         NOTPAYMENT,
-        FAILED
+        FAILED,
+        REFUNDED
     }
 }
