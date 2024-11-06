@@ -16,7 +16,7 @@ namespace FTravel.Service.Services.Interface
 
         //public Task<OrderModel> BuyTicketAsync(BuyTicketModel model);
 
-
+        public Task<bool> CancelTicketAsync(int ticketId);
 
     }
 }

@@ -105,6 +105,11 @@ namespace FTravel.Repository.Repositories
             return result;
         }
 
-
+        public async Task<Order> GetOrderByTicketId(int ticketId)
+        {
+            return await _context.Orders
+                .Include(x => x.OrderDetails)
+                .FirstOrDefaultAsync(x => x.OrderDetails.Any(od => od.TicketId == ticketId));
+        }
     }
 }

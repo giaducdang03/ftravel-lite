@@ -43,6 +43,8 @@ namespace FTravel.Repository.Repositories
             return await _context.Trips
                 .Include(x => x.Tickets)
                 .Include(x => x.Route)
+                .Include(x => x.Route.StartPointNavigation)
+                .Include(x => x.Route.EndPointNavigation)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

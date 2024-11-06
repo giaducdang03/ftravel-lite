@@ -166,6 +166,7 @@ namespace FTravel.Service.Services
                     await FirebaseLibrary.SendMessageFireBase(title, body, fcmToken);
                     return true;
                 }
+                return false;
             }
             throw new Exception("Account does not exist.");
         }
@@ -197,18 +198,15 @@ namespace FTravel.Service.Services
 
         public async Task<Notification> AddNotificationByCustomerId(int customerId, Notification notificationModel)
         {
-            var customer = await _userService.GetUserByIdAsync(customerId);
-            if (customer != null)
+            var user = await _userService.GetUserByIdAsync(customerId);
+
+            if (user != null)
             {
-                var user = await _userService.GetUserByEmailAsync(customer.Email);
-                if (user != null)
+                if (notificationModel != null)
                 {
-                    if (notificationModel != null)
-                    {
-                        notificationModel.UserId = user.Id;
-                        await PushMessageFirebase(notificationModel.Title, notificationModel.Message, user.Id);
-                        return await _notificationRepository.AddAsync(notificationModel);
-                    }
+                    notificationModel.UserId = user.Id;
+                    await PushMessageFirebase(notificationModel.Title, notificationModel.Message, user.Id);
+                    return await _notificationRepository.AddAsync(notificationModel);
                 }
             }
             return null;

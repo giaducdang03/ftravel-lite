@@ -28,5 +28,7 @@ namespace FTravel.Service.Services.Interface
         public Task<int> ExecutePaymentAsync(int walletId, TransactionType transactionType, int amount, int transactionId);
 
         public Task<bool> CheckWalletPaymentAysnc(int walletId, int amount);
+
+        public Task<bool> RefundToWalletAsync(int walletId, int amount, string message);
     }
 }
