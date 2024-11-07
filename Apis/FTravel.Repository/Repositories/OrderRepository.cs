@@ -108,7 +108,7 @@ namespace FTravel.Repository.Repositories
         public async Task<Order> GetOrderByTicketId(int ticketId)
         {
             return await _context.Orders
-                .Include(x => x.OrderDetails)
+                .Include(x => x.OrderDetails).OrderBy(x => x.Id)
                 .LastOrDefaultAsync(x => x.OrderDetails.Any(od => od.TicketId == ticketId));
         }
     }
