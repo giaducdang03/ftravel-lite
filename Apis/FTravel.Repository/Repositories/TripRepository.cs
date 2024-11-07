@@ -18,7 +18,7 @@ namespace FTravel.Repository.Repositories
 
         public async Task<Pagination<Trip>> GetAllTrips(PaginationParameter paginationParameter, TripFilter filter)
         {
-            var query = _context.Trips.Where(x => x.IsDeleted == false)
+            var query = _context.Trips.Where(x => x.IsDeleted == false && x.IsTemplate == false)
                                       .Include(x => x.Route)
                                       .Include(x => x.Route.StartPointNavigation)
                                       .Include(x => x.Route.EndPointNavigation)
@@ -154,6 +154,28 @@ namespace FTravel.Repository.Repositories
                 }
             }
             return false;
+        }
+
+        public async Task<Pagination<Trip>> GetAllTripStaff(PaginationParameter paginationParameter, TripFilter filter, int staffId)
+        {
+            var query = _context.Trips.Where(x => x.IsDeleted == false && x.DriverId == staffId && x.IsTemplate == false)
+                                      .Include(x => x.Route)
+                                      .Include(x => x.Route.StartPointNavigation)
+                                      .Include(x => x.Route.EndPointNavigation)
+                                      .AsQueryable();
+
+            // Apply filtering
+            query = ApplyTripFiltering(query, filter);
+
+            var itemCount = await query.CountAsync();
+
+            var items = await query
+                             .Skip((paginationParameter.PageIndex - 1) * paginationParameter.PageSize)
+                             .Take(paginationParameter.PageSize)
+                             .ToListAsync();
+
+            var result = new Pagination<Trip>(items, itemCount, paginationParameter.PageIndex, paginationParameter.PageSize);
+            return result;
         }
     }
 }

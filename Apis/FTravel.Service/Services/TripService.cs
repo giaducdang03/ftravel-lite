@@ -12,6 +12,7 @@ using FTravel.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -99,22 +100,23 @@ namespace FTravel.Service.Services
                     throw new Exception("Tuyến xe không hoạt động");
                 }
                 var newTrip = _mapper.Map<Trip>(tripModel);
+
                 //check driver
-                //var driver = await _userRepository.GetByIdAsync(newTrip.DriverId.Value);
-                //if (driver == null)
-                //{
-                //    throw new Exception("Không tìm thấy người lái");
-                //}
-                //var userRole = await _roleRepository.GetByIdAsync(driver.RoleId.Value);
-                //if (userRole.Name != RoleEnums.DRIVER.ToString())
-                //{
-                //    throw new Exception("Người dùng không phải là tài xế");
-                //}
-                //var hasOverlappingTrip = await _tripRepository.HasOverlappingTrip(newTrip.DriverId.Value, newTrip.EstimatedStartDate, newTrip.EstimatedEndDate);
-                //if (hasOverlappingTrip)
-                //{
-                //    throw new Exception("Tài xế đã có chuyến đi trùng thời gian");
-                //}
+                var driver = await _userRepository.GetByIdAsync(newTrip.DriverId.Value);
+                if (driver == null)
+                {
+                    throw new Exception("Không tìm thấy tài xế");
+                }
+
+                if (driver.Role != RoleEnums.STAFF.ToString())
+                {
+                    throw new Exception("Người dùng không phải là tài xế");
+                }
+                var hasOverlappingTrip = await _tripRepository.HasOverlappingTrip(newTrip.DriverId.Value, newTrip.EstimatedStartDate, newTrip.EstimatedEndDate);
+                if (hasOverlappingTrip)
+                {
+                    throw new Exception("Tài xế đã có chuyến đi trùng thời gian");
+                }
                 //status logic
                 if (tripModel.OpenTicketDate.Date.Hour > TimeUtils.GetTimeVietNam().Date.Hour)
                 {
@@ -177,7 +179,7 @@ namespace FTravel.Service.Services
             }
         }
 
-        public async Task<bool> UpdateTripAsync(int id, UpdateTripModel tripModel)
+        public async Task<bool> UpdateTripAsync(UpdateTripModel tripModel)
         {
             // Validate status
             if (!Enum.TryParse(typeof(TripStatus), tripModel.Status, true, out _))
@@ -185,10 +187,10 @@ namespace FTravel.Service.Services
                 throw new ArgumentException($"Trạng thái không hợp lệ. Trạng thái có thể là: {string.Join(", ", Enum.GetNames(typeof(TripStatus)))}.");
             }
 
-            var existingTrip = await _tripRepository.GetTripById(id);
+            var existingTrip = await _tripRepository.GetTripById(tripModel.Id);
             if (existingTrip == null)
             {
-                throw new KeyNotFoundException($"Không tìm thấy chuyến xe có id: {id}.");
+                throw new KeyNotFoundException($"Không tìm thấy chuyến xe có id: {tripModel.Id}.");
             }
             int routeId = existingTrip.RouteId == null ? default(int) : existingTrip.RouteId.Value;
 
@@ -312,6 +314,7 @@ namespace FTravel.Service.Services
             tripModel.Tickets = _mapper.Map<List<TicketModel>>(trip.Tickets);
             return tripModel;
         }
+
         private bool IsValidStatusTransition(string newStatus, string currentStatus)
         {
             currentStatus = currentStatus?.ToUpper();
@@ -341,6 +344,104 @@ namespace FTravel.Service.Services
                     // If the current status is not recognized, disallow any status change
                     return false;
             }
+        }
+
+        public async Task<bool> UpdateTripStatusAsyncV2(UpdateTripStatusModel updateTripStatus)
+        {
+            try
+            {
+                var trip = await _tripRepository.GetByIdAsync(updateTripStatus.Id);
+
+                if (trip == null)
+                {
+                    throw new KeyNotFoundException("Không tìm thấy chuyến xe.");
+                }
+
+                if (!IsValidStatusTransitionV2(updateTripStatus.Status, Enum.Parse<TripStatus>(trip.Status)))
+                {
+                    throw new ArgumentException($"Chuyển trạng thái không hợp lệ. Trạng thái của chuyến đi không thể chuyển từ {trip.Status} sang {updateTripStatus.Status.ToString()}");
+                }
+
+                // Set the current date if status is DEPARTED or COMPLETED
+                if (updateTripStatus.Status == TripStatus.DEPARTED)
+                {
+                    trip.ActualStartDate = TimeUtils.GetTimeVietNam();
+                }
+
+                if (updateTripStatus.Status == TripStatus.COMPLETED)
+                {
+                    trip.ActualEndDate = TimeUtils.GetTimeVietNam();
+                }
+
+                trip.Status = updateTripStatus.Status.ToString();
+
+                await _tripRepository.UpdateAsync(trip);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private bool IsValidStatusTransitionV2(TripStatus newStatus, TripStatus currentStatus)
+        {
+            switch (currentStatus)
+            {
+                case TripStatus.PENDING:
+                    return newStatus == TripStatus.OPENING || newStatus == TripStatus.CANCELED;
+                case TripStatus.OPENING:
+                    return newStatus == TripStatus.DEPARTED || newStatus == TripStatus.CANCELED;
+                case TripStatus.DEPARTED:
+                    return newStatus == TripStatus.COMPLETED;
+                case TripStatus.COMPLETED:
+                    // Once the trip is in "COMPLETED" status, no further status changes are allowed
+                    return false;
+                default:
+                    // If the current status is not recognized, disallow any status change
+                    return false;
+            }
+        }
+
+        public async Task<Pagination<TripModel>> GetTripStaffAsync(PaginationParameter paginationParameter, TripFilter filter, string email)
+        {
+            var loginUser = await _userRepository.GetUserByEmailAsync(email);
+            if (loginUser == null)
+            {
+                throw new Exception("Tài khoản không tồn tại");
+            }
+
+            if (!string.IsNullOrEmpty(filter.Search))
+            {
+                filter.Search = StringUtils.ConvertToUnSign(filter.Search);
+            }
+            if (!string.IsNullOrWhiteSpace(filter.TripStatus) && !Enum.TryParse(typeof(TripStatus), filter.TripStatus, true, out var _))
+            {
+                throw new ArgumentException("Trạng thái không hợp lệ");
+            }
+            var trips = await _tripRepository.GetAllTripStaff(paginationParameter, filter, loginUser.Id);
+            if (!trips.Any())
+            {
+                return null;
+            }
+
+            var tripModels = _mapper.Map<List<TripModel>>(trips);
+            foreach (var trip in tripModels)
+            {
+                var tickets = await _ticketRepository.GetAllByTripId(trip.Id);
+                if (tickets.Any())
+                {
+                    trip.LowestPrice = tickets.Min(t => t.TicketType.Price.Value);
+                }
+                else
+                {
+                    trip.LowestPrice = 0;
+                }
+            }
+            return new Pagination<TripModel>(tripModels,
+                trips.TotalCount,
+                trips.CurrentPage,
+                trips.PageSize);
         }
     }
 }

@@ -4,6 +4,7 @@ using FTravel.Repository.Commons.Filter;
 using FTravel.Repository.EntityModels;
 using FTravel.Service.BusinessModels.TripModels;
 using FTravel.Service.Enums;
+using FTravel.Service.Services;
 using FTravel.Service.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,12 +18,12 @@ namespace FTravel.API.Controllers
     public class TripController : ControllerBase
     {
         private readonly ITripService _tripService;
+        private readonly IClaimsService _claimsService;
 
-
-        public TripController(ITripService tripService)
+        public TripController(ITripService tripService, IClaimsService claimsService)
         {
             _tripService = tripService;
-
+            _claimsService = claimsService;
         }
 
         [HttpGet]
@@ -32,6 +33,50 @@ namespace FTravel.API.Controllers
             try
             {
                 var result = await _tripService.GetAllTripAsync(paginationParameter, filter);
+
+                if (result == null)
+                {
+                    return NotFound(new ResponseModel
+                    {
+                        HttpCode = StatusCodes.Status404NotFound,
+                        Message = "Không tìm thấy chuyến xe!"
+                    });
+                }
+                else
+                {
+                    var metadata = new
+                    {
+                        result.TotalCount,
+                        result.PageSize,
+                        result.CurrentPage,
+                        result.TotalPages,
+                        result.HasNext,
+                        result.HasPrevious
+                    };
+
+                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseModel
+                {
+                    HttpCode = StatusCodes.Status400BadRequest,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("staff")]
+        [Authorize(Roles = "STAFF")]
+        public async Task<IActionResult> GetAllTripStaff([FromQuery] PaginationParameter paginationParameter, TripFilter filter)
+        {
+            try
+            {
+                var email = _claimsService.GetCurrentUserEmail;
+
+                var result = await _tripService.GetTripStaffAsync(paginationParameter, filter, email);
 
                 if (result == null)
                 {
@@ -134,9 +179,9 @@ namespace FTravel.API.Controllers
                 });
             }
         }
-        [HttpPut("{id}")]
+        [HttpPut]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> UpdateTrip(int id, UpdateTripModel tripModel)
+        public async Task<IActionResult> UpdateTrip(UpdateTripModel tripModel)
         {
             try
             {
@@ -145,10 +190,14 @@ namespace FTravel.API.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var result = await _tripService.UpdateTripAsync(id, tripModel);
+                var result = await _tripService.UpdateTripAsync(tripModel);
                 if (result)
                 {
-                    return Ok("Cập nhật chuyến xe thành công!");
+                    return Ok(new ResponseModel
+                    {
+                        HttpCode = StatusCodes.Status200OK,
+                        Message = "Cập nhật chuyến xe thành công"
+                    });
                 }
                 else
                 {
@@ -184,9 +233,9 @@ namespace FTravel.API.Controllers
                 });
             }
         }
-        [HttpPut("{id}/status")]
-        [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> UpdateTripStatus(int id, string status)
+        [HttpPut("status")]
+        [Authorize(Roles = "ADMIN,STAFF")]
+        public async Task<IActionResult> UpdateTripStatus(UpdateTripStatusModel updateTripStatus)
         {
             try
             {
@@ -195,10 +244,14 @@ namespace FTravel.API.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var result = await _tripService.UpdateTripStatusAsync(id, status);
+                var result = await _tripService.UpdateTripStatusAsyncV2(updateTripStatus);
                 if (result)
                 {
-                    return Ok("Cập nhật trạng thái chuyến xe thành công!");
+                    return Ok(new ResponseModel
+                    {
+                        HttpCode = StatusCodes.Status200OK,
+                        Message = "Cập nhật trạng thái chuyến xe thành công"
+                    });
                 }
                 else
                 {
@@ -234,56 +287,56 @@ namespace FTravel.API.Controllers
                 });
             }
         }
-        [HttpPut("{id}/cancel")]
-        [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> CancelTrip(int id, string status)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+        //[HttpPut("{id}/cancel")]
+        //[Authorize(Roles = "ADMIN")]
+        //public async Task<IActionResult> CancelTrip(int id, string status)
+        //{
+        //    try
+        //    {
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return BadRequest(ModelState);
+        //        }
 
-                var result = await _tripService.CancelTripAsync(id, status);
-                if (result)
-                {
-                    return Ok("Xóa chuyến xe thành công!");
-                }
-                else
-                {
-                    return BadRequest(new ResponseModel
-                    {
-                        HttpCode = StatusCodes.Status400BadRequest,
-                        Message = "Xảy ra lỗi khi xóa chuyến xe!"
-                    });
-                }
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new ResponseModel
-                {
-                    HttpCode = StatusCodes.Status404NotFound,
-                    Message = ex.Message
-                });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new ResponseModel
-                {
-                    HttpCode = StatusCodes.Status400BadRequest,
-                    Message = ex.Message
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ResponseModel
-                {
-                    HttpCode = StatusCodes.Status400BadRequest,
-                    Message = ex.Message
-                });
-            }
-        }
+        //        var result = await _tripService.CancelTripAsync(id, status);
+        //        if (result)
+        //        {
+        //            return Ok("Xóa chuyến xe thành công!");
+        //        }
+        //        else
+        //        {
+        //            return BadRequest(new ResponseModel
+        //            {
+        //                HttpCode = StatusCodes.Status400BadRequest,
+        //                Message = "Xảy ra lỗi khi xóa chuyến xe!"
+        //            });
+        //        }
+        //    }
+        //    catch (KeyNotFoundException ex)
+        //    {
+        //        return NotFound(new ResponseModel
+        //        {
+        //            HttpCode = StatusCodes.Status404NotFound,
+        //            Message = ex.Message
+        //        });
+        //    }
+        //    catch (ArgumentException ex)
+        //    {
+        //        return BadRequest(new ResponseModel
+        //        {
+        //            HttpCode = StatusCodes.Status400BadRequest,
+        //            Message = ex.Message
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new ResponseModel
+        //        {
+        //            HttpCode = StatusCodes.Status400BadRequest,
+        //            Message = ex.Message
+        //        });
+        //    }
+        //}
         [HttpGet("template")]
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetTemplateTrip()
