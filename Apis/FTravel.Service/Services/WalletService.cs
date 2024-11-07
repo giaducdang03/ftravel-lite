@@ -344,6 +344,7 @@ namespace FTravel.Service.Services
                 // update wallet
                 wallet.AccountBalance += amount;
                 await _walletRepository.UpdateAsync(wallet);
+                await SendRefundNotificationToUser(wallet.Id, message);
 
                 return true;
             }
