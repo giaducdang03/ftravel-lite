@@ -19,5 +19,6 @@ namespace FTravel.Repository.Repositories.Interface
         public Task<bool> HasOverlappingTrip(int driverId, DateTime? newTripStart, DateTime? newTripEnd);
         public Task<List<TripService>> GetServiceByTripId(int id);
         public Task<bool> CheckServiceInTrip(int tripId, int serviceId);
+        public Task<Pagination<Trip>> GetAllTripStaff(PaginationParameter paginationParameter, TripFilter filter, int staffId);
     }
 }

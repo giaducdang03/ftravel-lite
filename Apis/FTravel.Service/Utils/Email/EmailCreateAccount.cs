@@ -102,7 +102,7 @@ namespace FTravel.Service.Utils.Email
                               <span>{email}</span>
                             </div>
                             <div style=""font-weight: 600"">
-                              <span>Mật khẩu:</span><span>{password}</span>
+                              <span>Mật khẩu: </span><span>{password}</span>
                             </div>
                           </div>
                         </div>
