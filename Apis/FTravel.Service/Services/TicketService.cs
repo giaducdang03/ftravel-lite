@@ -124,7 +124,7 @@ namespace FTravel.Service.Services
                     // refund to wallet
                     if (valueRefund > 0)
                     {
-                        string messageRefund = $"Hoàn trả {percentRefund}% giá vé và dịch vụ của chuyến đi {trip.Name} xuất phát lúc" +
+                        string messageRefund = $"Hoàn trả {percentRefund}% giá vé và dịch vụ của chuyến đi {trip.Name} xuất phát lúc " +
                             $"{NumberUtils.ConvertDateToCustomFormat(trip.EstimatedStartDate.Value)} " +
                             $"từ {trip.Route.StartPointNavigation.Name} đến {trip.Route.EndPointNavigation.Name}";
 

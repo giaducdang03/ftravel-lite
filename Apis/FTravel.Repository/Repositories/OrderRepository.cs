@@ -109,7 +109,7 @@ namespace FTravel.Repository.Repositories
         {
             return await _context.Orders
                 .Include(x => x.OrderDetails)
-                .FirstOrDefaultAsync(x => x.OrderDetails.Any(od => od.TicketId == ticketId));
+                .LastOrDefaultAsync(x => x.OrderDetails.Any(od => od.TicketId == ticketId));
         }
     }
 }

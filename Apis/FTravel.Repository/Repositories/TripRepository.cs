@@ -18,7 +18,7 @@ namespace FTravel.Repository.Repositories
 
         public async Task<Pagination<Trip>> GetAllTrips(PaginationParameter paginationParameter, TripFilter filter)
         {
-            var query = _context.Trips.Where(x => x.IsDeleted == false && x.IsTemplate == false)
+            var query = _context.Trips.Where(x => x.IsDeleted == false)
                                       .Include(x => x.Route)
                                       .Include(x => x.Route.StartPointNavigation)
                                       .Include(x => x.Route.EndPointNavigation)
