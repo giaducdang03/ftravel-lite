@@ -97,7 +97,8 @@ namespace FTravel.Service.Services
                     TicketId = x.TicketId,
                     TripId = x.Ticket.TripId,
                     TripStatus = x.Ticket.Status,
-                    TotalPrice = x.Order.TotalPrice
+                    TotalPrice = x.Order.TotalPrice,
+                    OrderStatus = x.Order.PaymentStatus,
                 }).ToList();
 
                 var result = new Pagination<OrderTicketModel>(returnModel, orders.Count, paginationParameter.PageIndex, paginationParameter.PageSize);
