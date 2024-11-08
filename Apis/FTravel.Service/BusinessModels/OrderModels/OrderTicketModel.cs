@@ -21,6 +21,7 @@ namespace FTravel.Service.BusinessModels.OrderModels
         public string? EndPointName { get; set; }
         public string? BuscompanyName { get; set; }
         public string? BuscompanyImg { get; set; }
+        public string? OrderStatus { get; set; }
     }
 
     public class OrderTicketModelDetails : OrderTicketModel
