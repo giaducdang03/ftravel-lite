@@ -25,14 +25,21 @@ namespace FTravel.Service.Services
         private readonly ITicketRepository _ticketRepository;
         private readonly IRouteRepository _routeRepository;
         private readonly IUserRepository _userRepository;
+        private readonly INotificationService _notificationService;
         private readonly IMapper _mapper;
-        public TripService(ITripRepository repository, ITicketRepository ticketRepository, IRouteRepository routeRepository,
-            IUserRepository userRepository, IMapper mapper)
+        public TripService(
+            ITripRepository repository, 
+            ITicketRepository ticketRepository, 
+            IRouteRepository routeRepository,
+            IUserRepository userRepository,
+            INotificationService notificationService,
+            IMapper mapper)
         {
             _tripRepository = repository;
             _ticketRepository = ticketRepository;
             _routeRepository = routeRepository;
             _userRepository = userRepository;
+            _notificationService = notificationService;
             _mapper = mapper;
         }
 
@@ -252,11 +259,34 @@ namespace FTravel.Service.Services
                 if (status == "DEPARTED")
                 {
                     trip.ActualStartDate = DateTime.UtcNow;
+
+                    // send noti
+                    var noti = new Notification
+                    {
+                        EntityId = trip.Id,
+                        Title = "Bắt đầu chuyến xe",
+                        Message = $"Chuyến xe đi từ {trip.Route.Name} của bạn đã bắt đầu. Hãy tuân thủ theo lịch trình đã quy định. " +
+                        $"Dự kiến hoàn thành lúc {trip.EstimatedEndDate}. Chúc bạn thượng lộ bình an.",
+                        UserId = trip.DriverId.Value
+                    };
+
+                    await _notificationService.AddNotificationByCustomerId(trip.DriverId.Value, noti);
                 }
                 // Update actual end date if the new status is "COMPLETED"
                 else if (status == "COMPLETED")
                 {
                     trip.ActualEndDate = DateTime.UtcNow;
+
+                    // send noti
+                    var noti = new Notification
+                    {
+                        EntityId = trip.Id,
+                        Title = "Hoàn thành chuyến xe",
+                        Message = $"Chuyến xe đi từ {trip.Route.Name} của bạn đã hoàn thành. Chúc bạn một ngày tốt lành.",
+                        UserId = trip.DriverId.Value
+                    };
+
+                    await _notificationService.AddNotificationByCustomerId(trip.DriverId.Value, noti);
                 }
                 trip.Status = status;
 
