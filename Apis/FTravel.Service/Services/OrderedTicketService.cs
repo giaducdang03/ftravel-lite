@@ -96,7 +96,7 @@ namespace FTravel.Service.Services
                     EstimateEndDate = x.Ticket.Trip.EstimatedEndDate,
                     TicketId = x.TicketId,
                     TripId = x.Ticket.TripId,
-                    TripStatus = x.Ticket.Status,
+                    TripStatus = x.Ticket.Trip.Status,
                     TotalPrice = x.Order.TotalPrice,
                     OrderStatus = x.Order.PaymentStatus,
                 }).ToList();
